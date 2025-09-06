@@ -6,14 +6,12 @@
     <string name="history">Tarix</string>
     <string name="settings">Sozlamalar</string>
     <string name="theme">Mavzu</string>
-    <string name="language">Til</string>
     <string name="license">Litsenziya</string>
     <string name="version">Ilova versiyasi</string>
     <string name="appearance">Ko‘rinish</string>
     <string name="about">Haqida</string>
     <string name="support">Qo‘llab-quvvatlash</string>
     <string name="theme_desc">Rang sxemasini tanlang</string>
-    <string name="language_desc">Til sozlamalarini o‘zgartirish</string>
     <string name="license_desc">Litsenziya ma’lumotlari</string>
     <string name="feedback">Fikr-mulohaza</string>
     <string name="feedback_desc">Bizga takliflaringizni yuboring</string>
@@ -28,10 +26,6 @@
     <string name="system_theme_desc">Qurilma sozlamalariga amal qilish</string>
     <string name="ui_preferences">UI sozlamalari</string>
     <string name="theme_selector_type">Mavzu tanlash usuli</string>
-    <string name="cancel">Bekor qilish</string>
-    <string name="selected">Tanlangan</string>
-
-    <!-- New -->
     <string name="notifications">Bildirishnomalar</string>
     <string name="enable_notifications">Bildirishnomalarni yoqish</string>
     <string name="notifications_desc">Ilova bildirishnomalarini qabul qilish</string>
@@ -57,4 +51,13 @@
     <string name="always_dark_theme">Doimo qorong‘i mavzu</string>
     <string name="follow_system_theme">Tizim sozlamalariga amal qilish</string>
     <string name="new_badge">Yangi</string>
+    <string name="system">Tizim</string>
+    <string name="english">Inglizcha</string>
+    <string name="uzbek">O‘zbekcha</string>
+    <string name="russian">Ruscha</string>
+    <string name="selected_label">Tanlangan</string>
+    <string name="language">Til</string>
+    <string name="language_desc">Tilni tanlang</string>
+    <string name="cancel">Bekor qilish</string>
+
 </resources>

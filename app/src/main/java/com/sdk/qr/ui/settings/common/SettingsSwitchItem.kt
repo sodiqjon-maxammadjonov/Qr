@@ -1,6 +1,5 @@
 package com.sdk.qr.ui.settings.common
 
-import SettingsItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults

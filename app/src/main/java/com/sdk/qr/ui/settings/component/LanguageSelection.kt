@@ -1,23 +1,39 @@
 package com.sdk.qr.ui.settings.component
 
-import com.sdk.qr.ui.settings.common.SettingsItem
+
+import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -27,28 +43,26 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sdk.qr.R
 import com.sdk.qr.data.util.getLocalizedLanguageString
 import com.sdk.qr.domain.model.settings.LanguageMode
-import com.sdk.qr.domain.model.settings.ThemeMode
+import com.sdk.qr.ui.settings.common.SettingsItem
 import com.sdk.qr.ui.settings.viewmodel.LanguageViewModel
-import com.sdk.qr.ui.settings.viewmodel.ThemeViewModel
+import com.sdk.qr.ui.theme.size.responsiveBorderRadius
 import com.sdk.qr.ui.theme.size.responsiveIconSize
 import com.sdk.qr.ui.theme.size.responsivePadding
-import com.sdk.qr.ui.theme.size.responsiveBorderRadius
+
 
 @Composable
-fun ThemeSelection(
-    viewModel: ThemeViewModel = viewModel(),
-            languageViewModel: LanguageViewModel = viewModel()
+fun LanguageSelection(
+    viewModel: LanguageViewModel = viewModel()
 ) {
-    val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
-    val languageMode by languageViewModel.languageMode.collectAsStateWithLifecycle() // <-- Tilni olamiz
+    val languageMode by viewModel.languageMode.collectAsStateWithLifecycle()
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
     SettingsItem(
-        title = stringResource(R.string.theme),
-        subtitle = "${stringResource(R.string.selected_label)}: ${stringResource(themeMode.labelRes)}",
+        title = stringResource(R.string.language),
+        subtitle = "${stringResource(R.string.selected_label)}: ${stringResource(languageMode.labelRes)}",
         leading = {
             Icon(
-                painter = painterResource(R.drawable.ic_brush),
+                painter = painterResource(R.drawable.ic_globus),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(responsiveIconSize())
@@ -66,11 +80,10 @@ fun ThemeSelection(
     )
 
     if (showDialog) {
-        ThemeSelectionDialog(
-            currentThemeMode = themeMode,
+        LanguageSelectionDialog(
             currentLanguageMode = languageMode,
-            onThemeSelected = { mode ->
-                viewModel.changeThemeMode(mode)
+            onLanguageSelected = { mode ->
+                viewModel.changeLanguageMode(mode)
                 showDialog = false
             },
             onDismiss = { showDialog = false }
@@ -78,12 +91,10 @@ fun ThemeSelection(
     }
 }
 
-// ThemeSelection.kt
 @Composable
-private fun ThemeSelectionDialog(
-    currentThemeMode: ThemeMode,
+private fun LanguageSelectionDialog(
     currentLanguageMode: LanguageMode,
-    onThemeSelected: (ThemeMode) -> Unit,
+    onLanguageSelected: (LanguageMode) -> Unit,
     onDismiss: () -> Unit
 ) {
     AnimatedVisibility(
@@ -95,7 +106,7 @@ private fun ThemeSelectionDialog(
             onDismissRequest = onDismiss,
             title = {
                 Text(
-                    text = getLocalizedLanguageString(R.string.theme, currentLanguageMode),
+                    text = getLocalizedLanguageString(R.string.language, currentLanguageMode),
                     style = MaterialTheme.typography.headlineSmall
                 )
             },
@@ -103,17 +114,11 @@ private fun ThemeSelectionDialog(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    ThemeMode.entries.forEach { mode ->
-                        ThemeOptionItem(
-                            mode = mode,
-                            isSelected = currentThemeMode == mode,
-                            label = getLocalizedLanguageString(mode.labelRes, currentLanguageMode),
-                            iconRes = when (mode) {
-                                ThemeMode.LIGHT -> R.drawable.ic_light_mode
-                                ThemeMode.DARK -> R.drawable.ic_dark_mode
-                                ThemeMode.SYSTEM -> R.drawable.ic_settings
-                            },
-                            onSelect = { onThemeSelected(mode) }
+                    LanguageMode.entries.forEach { mode ->
+                        LanguageOptionItem(
+                            isSelected = currentLanguageMode == mode,
+                            label = getLocalizedLanguageString(mode.labelRes, mode),
+                            onSelect = { onLanguageSelected(mode) }
                         )
                     }
                 }
@@ -132,11 +137,9 @@ private fun ThemeSelectionDialog(
 }
 
 @Composable
-private fun ThemeOptionItem(
-    mode: ThemeMode,
+private fun LanguageOptionItem(
     isSelected: Boolean,
     label: String,
-    iconRes: Int,
     onSelect: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -164,26 +167,9 @@ private fun ThemeOptionItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(responsivePadding()),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .background(
-                        color = getThemePreviewColor(mode),
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(iconRes),
-                    contentDescription = null,
-                    modifier = Modifier.size(12.dp),
-                    tint = Color.White
-                )
-            }
-
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyLarge,
@@ -191,23 +177,12 @@ private fun ThemeOptionItem(
                     MaterialTheme.colorScheme.onPrimaryContainer
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                modifier = Modifier.weight(1f)
+                }
             )
-
             RadioButton(
                 selected = isSelected,
-                onClick = null
+                onClick = null // onClick Card orqali ishlaydi
             )
         }
-    }
-}
-
-@Composable
-private fun getThemePreviewColor(mode: ThemeMode): Color {
-    return when (mode) {
-        ThemeMode.LIGHT -> Color(0xFFFFA726)
-        ThemeMode.DARK -> Color(0xFF42A5F5)
-        ThemeMode.SYSTEM -> MaterialTheme.colorScheme.primary
     }
 }

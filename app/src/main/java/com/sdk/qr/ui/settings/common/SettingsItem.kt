@@ -1,17 +1,43 @@
+package com.sdk.qr.ui.settings.common
+
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.sdk.qr.ui.theme.size.*
+import com.sdk.qr.ui.theme.size.responsiveBorderRadius
+import com.sdk.qr.ui.theme.size.responsiveCardElevation
+import com.sdk.qr.ui.theme.size.responsiveIconSize
+import com.sdk.qr.ui.theme.size.responsivePadding
+import com.sdk.qr.ui.theme.size.responsiveSpacing
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsItem(
     title: String,
@@ -24,11 +50,30 @@ fun SettingsItem(
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerLow
 ) {
     val shape = RoundedCornerShape(responsiveBorderRadius())
+    val interactionSource = remember { MutableInteractionSource() }
+
+    val animatedBackgroundColor by animateColorAsState(
+        targetValue = backgroundColor,
+        animationSpec = tween(300),
+        label = "background_color"
+    )
 
     val clickableModifier = if (onClick != null && enabled) {
         modifier
             .clip(shape)
-            .clickable { onClick() }
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                role = Role.Button,
+                onClick = onClick
+            )
+            .indication(
+                interactionSource = interactionSource,
+                indication = ripple(
+                    bounded = true,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            )
     } else {
         modifier.clip(shape)
     }
@@ -37,10 +82,12 @@ fun SettingsItem(
         modifier = clickableModifier.fillMaxWidth(),
         shape = shape,
         colors = CardDefaults.cardColors(
-            containerColor = backgroundColor
+            containerColor = animatedBackgroundColor
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = responsiveCardElevation()
+            defaultElevation = responsiveCardElevation(),
+            pressedElevation = responsiveCardElevation() + 2.dp,
+            disabledElevation = 0.dp
         )
     ) {
         Row(
@@ -50,9 +97,9 @@ fun SettingsItem(
                     horizontal = responsivePadding(),
                     vertical = responsiveSpacing()
                 ),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
         ) {
-            // Leading content (masalan, icon)
             leading?.let { leadingContent ->
                 Box(
                     modifier = Modifier
@@ -68,13 +115,18 @@ fun SettingsItem(
                 Spacer(modifier = Modifier.width(responsiveSpacing()))
             }
 
-            // Title va subtitle uchun column
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.Medium
+                    ),
                     color = if (enabled) {
                         MaterialTheme.colorScheme.onSurface
                     } else {
@@ -83,7 +135,6 @@ fun SettingsItem(
                 )
 
                 subtitle?.let { subtitleText ->
-                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = subtitleText,
                         style = MaterialTheme.typography.bodyMedium,
@@ -96,10 +147,15 @@ fun SettingsItem(
                 }
             }
 
-            // Trailing content
+
             trailing?.let { trailingContent ->
                 Spacer(modifier = Modifier.width(responsiveSpacing()))
-                trailingContent()
+                Box(
+                    modifier = Modifier.size(responsiveIconSize()),
+                    contentAlignment = Alignment.Center
+                ) {
+                    trailingContent()
+                }
             }
         }
     }

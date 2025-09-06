@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.sdk.qr.data.local.PreferencesKeys
 import com.sdk.qr.data.local.SETTINGS_DATASTORE
-import com.sdk.qr.domain.model.ThemeMode
-import com.sdk.qr.domain.model.ThemePreferences
+import com.sdk.qr.domain.model.settings.ThemeMode
+import com.sdk.qr.domain.model.settings.ThemePreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

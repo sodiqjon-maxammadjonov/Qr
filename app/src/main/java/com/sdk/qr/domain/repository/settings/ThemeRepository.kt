@@ -1,6 +1,6 @@
 package com.sdk.qr.domain.repository.settings
 
-import com.sdk.qr.domain.model.ThemeMode
+import com.sdk.qr.domain.model.settings.ThemeMode
 import kotlinx.coroutines.flow.Flow
 
 interface ThemeRepository {

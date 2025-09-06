@@ -10,7 +10,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sdk.qr.R
 import com.sdk.qr.ui.main.common.BottomNavItem
+import com.sdk.qr.ui.scan.screen.ScanScreen
 import com.sdk.qr.ui.settings.screen.SettingsScreen
 import kotlinx.coroutines.delay
 
@@ -76,10 +76,7 @@ fun MainScreen() {
     }
 }
 
-@Composable
-private fun ScanScreen(modifier: Modifier = Modifier) {
-    CenteredContent(text = stringResource(id = R.string.scan), modifier = modifier)
-}
+
 
 @Composable
 private fun GenerateScreen(modifier: Modifier = Modifier) {

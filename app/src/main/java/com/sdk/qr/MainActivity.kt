@@ -15,24 +15,27 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.sdk.qr.ui.main.screen.MainScreen
 import com.sdk.qr.ui.theme.AppTheme
+import com.sdk.qr.ui.theme.language.AppLanguage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             AppTheme {
-
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(WindowInsets.safeDrawing.asPaddingValues())
-                        .consumeWindowInsets(WindowInsets.safeDrawing),
-                ) {
-                    MainScreen()
+                AppLanguage {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(WindowInsets.safeDrawing.asPaddingValues())
+                            .consumeWindowInsets(WindowInsets.safeDrawing),
+                    ) {
+                        MainScreen()
+                    }
                 }
             }
         }

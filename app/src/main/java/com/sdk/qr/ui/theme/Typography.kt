@@ -2,6 +2,8 @@ package com.sdk.qr.ui.theme
 
 import android.annotation.SuppressLint
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -29,34 +31,30 @@ val AppTypography = Typography(
         lineHeight = 44.sp,
         letterSpacing = 0.sp,
     ),
-
-    // Headline styles - sarlavhalar uchun
     headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 32.sp,
         lineHeight = 40.sp,
         letterSpacing = 0.sp,
     ),
     headlineMedium = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 28.sp,
         lineHeight = 36.sp,
         letterSpacing = 0.sp,
     ),
     headlineSmall = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
         lineHeight = 32.sp,
         letterSpacing = 0.sp,
     ),
-
-    // Title styles - kichik sarlavhalar uchun
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp,
@@ -66,7 +64,7 @@ val AppTypography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.1.sp,
+        letterSpacing = 0.15.sp,
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily.Default,
@@ -75,8 +73,6 @@ val AppTypography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
     ),
-
-    // Body styles - asosiy matn uchun
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -98,8 +94,6 @@ val AppTypography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp,
     ),
-
-    // Label styles - tugmalar va labellar uchun
     labelLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
@@ -120,35 +114,40 @@ val AppTypography = Typography(
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp,
-    ),
+    )
 )
 
+// Extension functions - optimizatsiyalangan
 @SuppressLint("ConfigurationScreenWidthHeight")
-@androidx.compose.runtime.Composable
+@Composable
 fun Typography.responsiveTitle(): TextStyle {
+    val screenWidth = LocalConfiguration.current.screenWidthDp
     return when {
-        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 360 -> titleSmall
-        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 600 -> titleMedium
-        else -> titleLarge
+        screenWidth < 360 -> titleSmall
+        screenWidth < 600 -> titleMedium
+        screenWidth < 840 -> titleLarge
+        else -> headlineSmall
     }
 }
 
 @SuppressLint("ConfigurationScreenWidthHeight")
-@androidx.compose.runtime.Composable
+@Composable
 fun Typography.responsiveBody(): TextStyle {
+    val screenWidth = LocalConfiguration.current.screenWidthDp
     return when {
-        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 360 -> bodySmall
-        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 600 -> bodyMedium
+        screenWidth < 360 -> bodySmall
+        screenWidth < 600 -> bodyMedium
         else -> bodyLarge
     }
 }
 
 @SuppressLint("ConfigurationScreenWidthHeight")
-@androidx.compose.runtime.Composable
+@Composable
 fun Typography.responsiveHeadline(): TextStyle {
+    val screenWidth = LocalConfiguration.current.screenWidthDp
     return when {
-        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 360 -> headlineSmall
-        androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 600 -> headlineMedium
+        screenWidth < 360 -> headlineSmall
+        screenWidth < 600 -> headlineMedium
         else -> headlineLarge
     }
 }

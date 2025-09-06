@@ -1,4 +1,4 @@
-package com.sdk.qr.domain.model
+package com.sdk.qr.domain.model.settings
 
 import kotlinx.coroutines.flow.Flow
 

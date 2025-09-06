@@ -26,13 +26,11 @@ fun SettingsGroup(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(
-                horizontal = responsivePadding(),
                 vertical = 8.dp
             )
         )
 
         Column(
-            modifier = Modifier.padding(horizontal = responsivePadding()),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             content()
